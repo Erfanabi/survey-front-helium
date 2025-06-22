@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+h2 {
+  font-family: "Modam", Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+  font-family: "Modam";
+  src:
+    url("/fonts/ModamWeb-Regular.woff2") format("woff2"),
+    url("/fonts/ModamWeb-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ModamBlack";
+  src:
+    url("/fonts/ModamWeb-Black.woff2") format("woff2"),
+    url("/fonts/ModamWeb-Black.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
