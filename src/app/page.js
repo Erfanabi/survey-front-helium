@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "@heroui/button";
 import { Rating } from "react-simple-star-rating";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const questions = [
   "از تجربه کلی خود در هلیوم پارک چقدر راضی بودید؟",
@@ -88,6 +89,10 @@ export default function SurveyForm() {
     return "😄";
   };
 
+  // if(true){
+  //   return <LoadingOverlay/>
+  // }
+
   return (
     <div
       className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
@@ -95,83 +100,94 @@ export default function SurveyForm() {
         backgroundImage: "url('/k2.jpg')",
       }}
     >
-      <div className="relative mx-auto mt-10 h-full min-h-[300px] w-[80vw] max-w-md rounded-md border bg-white/95 px-3 py-4 shadow-lg">
-        <h2 className="text-md mb-5 font-bold">
-          سؤال {step + 1} از {questions.length}
-        </h2>
+      {true ? (
+        <LoadingOverlay />
+      ) : (
+        <div className="relative mx-auto mt-10 h-full min-h-[300px] w-[80vw] max-w-md rounded-md border bg-white/95 px-3 py-4 shadow-lg">
+          <h2 className="text-md mb-5 font-bold">
+            سؤال {step + 1} از {questions.length}
+          </h2>
 
-        <p className="text-md mb-6 font-medium text-gray-700">
-          {questions[step]}
-        </p>
+          <p className="text-md mb-6 font-medium text-gray-700">
+            {questions[step]}
+          </p>
 
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex h-full flex-col justify-between"
-        >
-          <div className="text-center">
-            <Rating
-              onClick={rate => formik.setFieldValue("score", rate)}
-              size={56}
-              allowFraction={true}
-              initialValue={formik.values.score}
-              fillColorArray={[
-                "#ef4444",
-                "#f59e0b",
-                "#fbbf24",
-                "#10b981",
-                "#22c55e",
-              ]}
-              transition
-              allowHover
-              fillIcon={"★"}
-              emptyIcon={"☆"}
-              SVGclassName="inline-block drop-shadow-lg"
-              className="mx-auto space-x-3 text-3xl rtl:space-x-reverse"
-              style={{ marginBottom: 4, gap: 24 }}
-            />
+          <form
+            onSubmit={formik.handleSubmit}
+            className="flex h-full flex-col justify-between"
+          >
+            <div className="text-center">
+              <Rating
+                onClick={rate => formik.setFieldValue("score", rate)}
+                size={56}
+                allowFraction={true}
+                initialValue={formik.values.score}
+                fillColorArray={[
+                  "#ef4444",
+                  "#f59e0b",
+                  "#fbbf24",
+                  "#10b981",
+                  "#22c55e",
+                ]}
+                transition
+                allowHover
+                fillIcon={"★"}
+                emptyIcon={"☆"}
+                SVGclassName="inline-block drop-shadow-lg"
+                className="mx-auto space-x-3 text-3xl rtl:space-x-reverse"
+                style={{ marginBottom: 4, gap: 24 }}
+              />
 
-            <div className="mt-3 text-2xl">{getEmoji(formik.values.score)}</div>
-
-            {(formik.values.score === 1 || formik.values.score === 0.5) && (
-              <div className="mb-10 mt-3">
-                <label
-                  htmlFor="badReason"
-                  className="mb-2 block text-sm font-medium text-red-600"
-                >
-                  لطفاً دلیل نارضایتی خود را بنویسید:
-                </label>
-                <textarea
-                  id="badReason"
-                  name="badReason"
-                  className="w-full rounded border border-red-400 p-2 text-sm focus:border-red-600 focus:ring-2 focus:ring-red-200"
-                  rows={3}
-                  value={formik.values.badReason || ""}
-                  onChange={formik.handleChange}
-                  placeholder="دلیل..."
-                />
+              <div className="mt-3 text-2xl">
+                {getEmoji(formik.values.score)}
               </div>
-            )}
-          </div>
 
-          <div className="absolute bottom-3 left-3 right-3 flex justify-between gap-4">
-            {step > 0 && (
+              {(formik.values.score === 1 || formik.values.score === 0.5) && (
+                <div className="mb-10 mt-3">
+                  <label
+                    htmlFor="badReason"
+                    className="mb-2 block text-sm font-medium text-red-600"
+                  >
+                    لطفاً دلیل نارضایتی خود را بنویسید:
+                  </label>
+                  <textarea
+                    id="badReason"
+                    name="badReason"
+                    className="w-full rounded border border-red-400 p-2 text-sm focus:border-red-600 focus:ring-2 focus:ring-red-200"
+                    rows={3}
+                    value={formik.values.badReason || ""}
+                    onChange={formik.handleChange}
+                    placeholder="دلیل..."
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="absolute bottom-3 left-3 right-3 flex justify-between gap-4">
+              {step > 0 && (
+                <Button
+                  radius="sm"
+                  variant="light"
+                  color="danger"
+                  onClick={handlePrevious}
+                  type="button"
+                >
+                  قبلی
+                </Button>
+              )}
+
               <Button
+                type="submit"
+                variant="shadow"
+                color="default"
                 radius="sm"
-                variant="light"
-                color="danger"
-                onClick={handlePrevious}
-                type="button"
               >
-                قبلی
+                {step === questions.length - 1 ? "ارسال نهایی" : "سؤال بعدی"}
               </Button>
-            )}
-
-            <Button type="submit" variant="shadow" color="default" radius="sm">
-              {step === questions.length - 1 ? "ارسال نهایی" : "سؤال بعدی"}
-            </Button>
-          </div>
-        </form>
-      </div>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
