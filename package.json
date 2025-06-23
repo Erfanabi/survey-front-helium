@@ -1,0 +1,37 @@
+{
+  "name": "messaging-system-front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroui/button": "^2.2.19",
+    "@heroui/checkbox": "^2.3.18",
+    "@heroui/input": "^2.4.19",
+    "@heroui/slider": "^2.4.19",
+    "@heroui/system": "^2.4.15",
+    "@heroui/theme": "^2.4.15",
+    "formik": "^2.4.6",
+    "framer-motion": "^12.12.1",
+    "next": "15.3.2",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.5.2",
+    "react-simple-star-rating": "^5.1.7",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  }
+}

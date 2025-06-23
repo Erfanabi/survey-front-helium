@@ -130,8 +130,10 @@ export default function SurveyForm() {
               style={{ marginBottom: 4, gap: 24 }}
             />
 
+            <div className="mt-3 text-2xl">{getEmoji(formik.values.score)}</div>
+
             {(formik.values.score === 1 || formik.values.score === 0.5) && (
-              <div className="mt-4">
+              <div className="mb-10 mt-3">
                 <label
                   htmlFor="badReason"
                   className="mb-2 block text-sm font-medium text-red-600"
@@ -149,8 +151,6 @@ export default function SurveyForm() {
                 />
               </div>
             )}
-
-            <div className="mt-3 text-lg">{getEmoji(formik.values.score)}</div>
           </div>
 
           <div className="absolute bottom-3 left-3 right-3 flex justify-between gap-4">
