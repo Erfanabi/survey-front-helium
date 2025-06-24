@@ -1,11 +1,7 @@
 "use client";
 
-import React from "react";
-
 export default function LoadingOverlay() {
   return (
-    // <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-    //   <div className="flex flex-col items-center gap-4 rounded-xl bg-white p-6 shadow-xl">
     <div className="flex flex-col items-center gap-y-3">
       <div role="status">
         <svg
@@ -24,11 +20,10 @@ export default function LoadingOverlay() {
             fill="currentFill"
           />
         </svg>
+
         <span class="sr-only">Loading...</span>
       </div>
       <p className="text-xl font-medium text-yellow-300">در حال بارگذاری...</p>
     </div>
-    //   </div>
-    // </div>
   );
 }
