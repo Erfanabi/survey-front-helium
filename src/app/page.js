@@ -7,8 +7,8 @@ import { Button } from "@heroui/button";
 import { Rating } from "react-simple-star-rating";
 import { Textarea } from "@heroui/input";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import Image from "next/image";
 import ShowThankYou from "@/components/ShowThankYou";
+import { useSearchParams } from "next/navigation";
 
 const getValidationSchema = Yup.object().shape({
   score: Yup.number()
@@ -32,6 +32,10 @@ const getValidationSchema = Yup.object().shape({
 });
 
 export default function SurveyForm() {
+  const searchParams = useSearchParams();
+
+  console.log(searchParams.get("id"));
+
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]);
