@@ -34,35 +34,44 @@ const getValidationSchema = Yup.object().shape({
 export default function SurveyForm() {
   const searchParams = useSearchParams();
 
-  console.log(searchParams.get("id"));
+  // console.log(searchParams.get("id"));
 
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState(null);
+  const [questionsState, setQuestionsState] = useState({
+    questions: [],
+    loading: true,
+    fetchError: null,
+  });
   const [submitting, setSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    setFetchError(null);
+    setQuestionsState({ questions: [], loading: true, fetchError: null });
     fetch("/api/manager/crm/customers/questions")
       .then(res => {
         if (!res.ok) throw new Error("خطا در دریافت سوالات");
         return res.json();
       })
       .then(data => {
-        console.log(data?.data?.questions);
-
-        setQuestions(data?.data?.questions);
-        setLoading(false);
+        setQuestionsState({
+          questions: data?.data?.questions || [],
+          loading: false,
+          fetchError: null,
+        });
       })
       .catch(err => {
-        setFetchError(err.message);
-        setLoading(false);
+        setQuestionsState({
+          questions: [],
+          loading: false,
+          fetchError: err.message,
+        });
       });
   }, []);
+
+  const questions = questionsState.questions;
+  const loading = questionsState.loading;
+  const fetchError = questionsState.fetchError;
 
   const question = questions[step];
   const isLastStep = step === questions.length - 1;
@@ -202,7 +211,7 @@ export default function SurveyForm() {
       className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
       style={{ backgroundImage: "url('/k2.jpg')" }}
     >
-      {true ? (
+      {showThankYou ? (
         <ShowThankYou />
       ) : loading || submitting ? (
         <LoadingOverlay />
