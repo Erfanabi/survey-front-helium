@@ -38,11 +38,13 @@ export default function SurveyForm() {
 
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
+
   const [questionsState, setQuestionsState] = useState({
     questions: [],
     loading: true,
     fetchError: null,
   });
+
   const [submitting, setSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
 
@@ -152,14 +154,11 @@ export default function SurveyForm() {
         });
         setSubmitting(true);
         try {
-          const res = await fetch(
-            "http://192.168.66.3:3000/api/manager/crm/sms-survey/5578",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ response }),
-            },
-          );
+          const res = await fetch("/api/manager/crm/sms-survey/5578", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ response }),
+          });
           if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
           console.log(res);
           setShowThankYou(true);
@@ -389,7 +388,13 @@ export default function SurveyForm() {
                 </Button>
               )}
 
-              <Button type="submit" variant="solid" color="primary" radius="sm">
+              <Button
+                type="submit"
+                variant="solid"
+                color="primary"
+                radius="sm"
+                isLoading={submitting}
+              >
                 {isLastStep ? "ارسال نهایی" : "سؤال بعدی"}
               </Button>
             </div>
