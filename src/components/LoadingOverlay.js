@@ -6,7 +6,7 @@ export default function LoadingOverlay() {
       <div role="status">
         <svg
           aria-hidden="true"
-          class="h-10 w-10 animate-spin fill-yellow-300 text-gray-200 dark:text-gray-600"
+          className="h-10 w-10 animate-spin fill-yellow-300 text-gray-200 dark:text-gray-600"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@ export default function LoadingOverlay() {
           />
         </svg>
 
-        <span class="sr-only">Loading...</span>
+        <span className="sr-only">Loading...</span>
       </div>
       <p className="text-xl font-medium text-yellow-300">در حال بارگذاری...</p>
     </div>
