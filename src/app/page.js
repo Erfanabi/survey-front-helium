@@ -47,8 +47,22 @@ export default function SurveyForm() {
 
   const [submitting, setSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+  const [alreadyParticipated, setAlreadyParticipated] = useState(false);
 
   useEffect(() => {
+    const fetchParticipated = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/83`,
+        );
+        if (!res.ok) throw new Error("خطا در دریافت");
+        const data = await res.json();
+        setAlreadyParticipated(data?.data?.flag);
+      } catch (err) {
+        console.log({ err });
+      }
+    };
+
     const fetchQuestions = async () => {
       setQuestionsState({ questions: [], loading: true, fetchError: null });
 
@@ -70,6 +84,8 @@ export default function SurveyForm() {
         });
       }
     };
+
+    fetchParticipated();
 
     fetchQuestions();
   }, []);
@@ -148,13 +164,18 @@ export default function SurveyForm() {
         });
         setSubmitting(true);
         try {
-          const res = await fetch(process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ response }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/83`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ response }),
+            },
+          );
 
-          if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
+          console.log(res);
+
+          // if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
 
           const data = await res.json(); // یا res.text() اگر پاسخ متنی باشد
           console.log("Response data:", data);
@@ -165,7 +186,7 @@ export default function SurveyForm() {
           // موفقیت
           // اینجا می‌توانید پیام موفقیت یا ریدایرکت بگذارید
         } catch (e) {
-          console.error("Error:", e.message);
+          console.error("Error:", e);
           // خطا
           // اینجا می‌توانید پیام خطا نمایش دهید
         } finally {
@@ -209,7 +230,9 @@ export default function SurveyForm() {
       className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
       style={{ backgroundImage: "url('/k2.jpg')" }}
     >
-      {showThankYou ? (
+      {alreadyParticipated ? (
+        <ShowThankYou alreadyParticipated />
+      ) : showThankYou ? (
         <ShowThankYou />
       ) : loading || submitting ? (
         <LoadingOverlay />

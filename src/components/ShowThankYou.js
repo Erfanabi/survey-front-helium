@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function ShowThankYou({ alreadyParticipated = false }) {
   return (
-    <div className="flex h-full min-h-[300px] w-full flex-col items-center justify-center rounded-md bg-white/90 p-8 shadow-lg">
+    <div className="flex h-full min-h-[300px] w-[85vw] flex-col items-center justify-center rounded-md bg-white/90 p-8 shadow-lg">
       {alreadyParticipated ? (
         <>
           <h2 className="mb-4 text-2xl font-bold text-yellow-600">
