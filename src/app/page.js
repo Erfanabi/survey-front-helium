@@ -36,20 +36,21 @@ export default function SurveyForm() {
 
   // console.log(searchParams.get("id"));
 
-  const id = searchParams.get("id");
+  const id = searchParams?.get("id");
 
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
-
   const [questionsState, setQuestionsState] = useState({
     questions: [],
     loading: true,
     fetchError: null,
   });
-
   const [submitting, setSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
-  const [alreadyParticipated, setAlreadyParticipated] = useState(false);
+  const [participationState, setParticipationState] = useState({
+    flag: false,
+    sentFlag: false,
+  });
 
   useEffect(() => {
     const fetchParticipated = async () => {
@@ -59,7 +60,10 @@ export default function SurveyForm() {
         );
         if (!res.ok) throw new Error("خطا در دریافت");
         const data = await res.json();
-        setAlreadyParticipated(data?.data?.flag);
+        setParticipationState({
+          flag: data?.data?.flag || false,
+          sentFlag: data?.data?.sentFlag || false,
+        });
       } catch (err) {
         console.log({ err });
       }
@@ -227,12 +231,32 @@ export default function SurveyForm() {
     return "😄";
   };
 
+  // اگر id وجود نداشت، پیام خطا نمایش بده
+  if (!id || !participationState.sentFlag) {
+    return (
+      <div
+        className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
+        style={{ backgroundImage: "url('/k2.jpg')" }}
+      >
+        <div className="flex h-full min-h-[250px] w-[85vw] flex-col items-center justify-center rounded-md bg-white/90 p-8 shadow-lg">
+          <h2 className="mb-4 text-2xl font-bold text-red-600">لینک نامعتبر</h2>
+          <p className="mb-2 text-lg text-gray-700">
+            لینک اعتبارسنجی معتبر نمی‌باشد.
+          </p>
+          <p className="text-md text-gray-500">
+            لطفاً از لینک صحیح استفاده کنید.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
       style={{ backgroundImage: "url('/k2.jpg')" }}
     >
-      {alreadyParticipated ? (
+      {participationState.flag ? (
         <ShowThankYou alreadyParticipated />
       ) : showThankYou ? (
         <ShowThankYou />
