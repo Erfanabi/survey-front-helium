@@ -49,26 +49,29 @@ export default function SurveyForm() {
   const [showThankYou, setShowThankYou] = useState(false);
 
   useEffect(() => {
-    setQuestionsState({ questions: [], loading: true, fetchError: null });
-    fetch("/api/manager/crm/customers/questions")
-      .then(res => {
+    const fetchQuestions = async () => {
+      setQuestionsState({ questions: [], loading: true, fetchError: null });
+
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_QUESTIONS);
         if (!res.ok) throw new Error("خطا در دریافت سوالات");
-        return res.json();
-      })
-      .then(data => {
+        const data = await res.json();
+
         setQuestionsState({
           questions: data?.data?.questions || [],
           loading: false,
           fetchError: null,
         });
-      })
-      .catch(err => {
+      } catch (err) {
         setQuestionsState({
           questions: [],
           loading: false,
           fetchError: err.message,
         });
-      });
+      }
+    };
+
+    fetchQuestions();
   }, []);
 
   const questions = questionsState.questions;
@@ -77,15 +80,6 @@ export default function SurveyForm() {
 
   const question = questions[step];
   const isLastStep = step === questions.length - 1;
-
-  // // اگر هنوز سوالات لود نشده یا خطا داریم
-  // if (loading) return <LoadingOverlay />;
-  // if (fetchError)
-  //   return <div className="mt-10 text-center text-red-500">{fetchError}</div>;
-  // if (!questions.length)
-  //   return (
-  //     <div className="mt-10 text-center">سوالی برای نمایش وجود ندارد.</div>
-  //   );
 
   const formik = useFormik({
     initialValues: {
@@ -154,19 +148,24 @@ export default function SurveyForm() {
         });
         setSubmitting(true);
         try {
-          const res = await fetch("/api/manager/crm/sms-survey/5578", {
+          const res = await fetch(process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ response }),
           });
+
           if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
-          console.log(res);
+
+          const data = await res.json(); // یا res.text() اگر پاسخ متنی باشد
+          console.log("Response data:", data);
+
           setShowThankYou(true);
           console.log({ response });
 
           // موفقیت
           // اینجا می‌توانید پیام موفقیت یا ریدایرکت بگذارید
         } catch (e) {
+          console.error("Error:", e.message);
           // خطا
           // اینجا می‌توانید پیام خطا نمایش دهید
         } finally {
