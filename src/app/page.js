@@ -36,6 +36,8 @@ export default function SurveyForm() {
 
   // console.log(searchParams.get("id"));
 
+  const id = searchParams.get("id");
+
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
 
@@ -53,7 +55,7 @@ export default function SurveyForm() {
     const fetchParticipated = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/83`,
+          `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/${id}`,
         );
         if (!res.ok) throw new Error("خطا در دریافت");
         const data = await res.json();
@@ -165,7 +167,7 @@ export default function SurveyForm() {
         setSubmitting(true);
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/83`,
+            `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/${id}`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
