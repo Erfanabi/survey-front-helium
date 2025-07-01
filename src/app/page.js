@@ -231,6 +231,17 @@ export default function SurveyForm() {
     return "😄";
   };
 
+  if (loading || submitting) {
+    return (
+      <div
+        className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
+        style={{ backgroundImage: "url('/k2.jpg')" }}
+      >
+        <LoadingOverlay />;
+      </div>
+    );
+  }
+
   // اگر id وجود نداشت، پیام خطا نمایش بده
   if (!id || !participationState.sentFlag) {
     return (
@@ -260,8 +271,6 @@ export default function SurveyForm() {
         <ShowThankYou alreadyParticipated />
       ) : showThankYou ? (
         <ShowThankYou />
-      ) : loading || submitting ? (
-        <LoadingOverlay />
       ) : (
         <div className="relative mx-auto mt-10 h-full min-h-[290px] w-[85vw] max-w-md rounded-md border bg-white/95 px-3 py-4 shadow-lg">
           <h2 className="text-md mb-5 font-bold">
