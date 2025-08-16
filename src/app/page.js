@@ -51,6 +51,7 @@ export default function SurveyForm() {
     flag: false,
     sentFlag: false,
   });
+  const [introductionWays, setIntroductionWays] = useState([]);
 
   useEffect(() => {
     const fetchParticipated = async () => {
@@ -91,9 +92,24 @@ export default function SurveyForm() {
       }
     };
 
+    const fetchIntroductionWays = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_INTRODUCTION_WAYS}`,
+        );
+        if (!res.ok) throw new Error("خطا در دریافت");
+        const data = await res.json();
+        setIntroductionWays(data.data.introduction_ways);
+      } catch (err) {
+        console.log({ err });
+      }
+    };
+
     fetchParticipated();
 
     fetchQuestions();
+
+    fetchIntroductionWays();
   }, []);
 
   const questions = questionsState.questions;
@@ -161,6 +177,11 @@ export default function SurveyForm() {
             desc = answers[finalCommentKey] ?? null;
             value = null;
             desc = desc === "" ? null : desc;
+          } else if (q.TypeId === 4) {
+            // For introductionWays, store the selected id as value
+            value = answers[questionKey] ?? null;
+            desc = null;
+            value = value === "" ? null : value;
           }
           return {
             questionId: Number(q.id),
@@ -169,35 +190,37 @@ export default function SurveyForm() {
           };
         });
         setSubmitting(true);
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/${id}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ response }),
-            },
-          );
+        console.log(response);
 
-          console.log(res);
+        // try {
+        //   const res = await fetch(
+        //     `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/${id}`,
+        //     {
+        //       method: "POST",
+        //       headers: { "Content-Type": "application/json" },
+        //       body: JSON.stringify({ response }),
+        //     },
+        //   );
 
-          // if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
+        //   console.log(res);
 
-          const data = await res.json(); // یا res.text() اگر پاسخ متنی باشد
-          console.log("Response data:", data);
+        //   // if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
 
-          setShowThankYou(true);
-          console.log({ response });
+        //   const data = await res.json(); // یا res.text() اگر پاسخ متنی باشد
+        //   console.log("Response data:", data);
 
-          // موفقیت
-          // اینجا می‌توانید پیام موفقیت یا ریدایرکت بگذارید
-        } catch (e) {
-          console.error("Error:", e);
-          // خطا
-          // اینجا می‌توانید پیام خطا نمایش دهید
-        } finally {
-          setSubmitting(false);
-        }
+        //   setShowThankYou(true);
+        //   console.log({ response });
+
+        //   // موفقیت
+        //   // اینجا می‌توانید پیام موفقیت یا ریدایرکت بگذارید
+        // } catch (e) {
+        //   console.error("Error:", e);
+        //   // خطا
+        //   // اینجا می‌توانید پیام خطا نمایش دهید
+        // } finally {
+        //   setSubmitting(false);
+        // }
       }
     },
   });
@@ -277,7 +300,7 @@ export default function SurveyForm() {
             سؤال {step + 1} از {questions.length}
           </h2>
 
-          <p className="text-md mb-8 font-medium text-gray-700">
+          <p className="text-md mb-6 font-medium text-gray-700">
             {question?.Description}
           </p>
 
@@ -428,6 +451,36 @@ export default function SurveyForm() {
                     }}
                     radius="sm"
                   />
+                </div>
+              )}
+
+              {/* Type 4: Introduction Ways */}
+              {question?.TypeId === 4 && (
+                <div className="mb-10 mt-1 text-center">
+                  <div className="flex flex-col items-center gap-2 pb-5">
+                    {introductionWays.map(way => (
+                      <label
+                        key={way.id}
+                        className={`flex w-full max-w-xs cursor-pointer items-center rounded border px-2 py-2 text-right transition-all ${formik.values.score === way.id ? "border-2 border-blue-600 bg-blue-50" : "border border-gray-300 bg-white hover:bg-gray-50"}`}
+                      >
+                        <input
+                          type="radio"
+                          name="score"
+                          value={way.id}
+                          checked={formik.values.score === way.id}
+                          onChange={() => {
+                            formik.setFieldValue("score", way.id);
+                            setAnswers(prev => ({
+                              ...prev,
+                              [`question${step + 1}`]: way.id,
+                            }));
+                          }}
+                          className="ml-1 mr-2 accent-blue-600"
+                        />
+                        {way.title}
+                      </label>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
