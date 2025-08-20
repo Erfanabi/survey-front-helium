@@ -192,35 +192,35 @@ export default function SurveyForm() {
         setSubmitting(true);
         console.log(response);
 
-        // try {
-        //   const res = await fetch(
-        //     `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/${id}`,
-        //     {
-        //       method: "POST",
-        //       headers: { "Content-Type": "application/json" },
-        //       body: JSON.stringify({ response }),
-        //     },
-        //   );
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_SUBMIT_SURVEY}/${id}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ response }),
+            },
+          );
 
-        //   console.log(res);
+          console.log(res);
 
-        //   // if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
+          // if (!res.ok) throw new Error("خطا در ارسال اطلاعات");
 
-        //   const data = await res.json(); // یا res.text() اگر پاسخ متنی باشد
-        //   console.log("Response data:", data);
+          const data = await res.json(); // یا res.text() اگر پاسخ متنی باشد
+          console.log("Response data:", data);
 
-        //   setShowThankYou(true);
-        //   console.log({ response });
+          setShowThankYou(true);
+          console.log({ response });
 
-        //   // موفقیت
-        //   // اینجا می‌توانید پیام موفقیت یا ریدایرکت بگذارید
-        // } catch (e) {
-        //   console.error("Error:", e);
-        //   // خطا
-        //   // اینجا می‌توانید پیام خطا نمایش دهید
-        // } finally {
-        //   setSubmitting(false);
-        // }
+          // موفقیت
+          // اینجا می‌توانید پیام موفقیت یا ریدایرکت بگذارید
+        } catch (e) {
+          console.error("Error:", e);
+          // خطا
+          // اینجا می‌توانید پیام خطا نمایش دهید
+        } finally {
+          setSubmitting(false);
+        }
       }
     },
   });
