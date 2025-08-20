@@ -340,7 +340,7 @@ export default function SurveyForm() {
                     {getEmoji(formik.values.score)}
                   </div>
 
-                  {[1, 2, 9, 10].includes(formik.values.score) && (
+                  {[1, 2, 3, 4, 5, 6, 9, 10].includes(formik.values.score) && (
                     <div className="mt-3">
                       <Textarea
                         id="badReason"
@@ -358,7 +358,7 @@ export default function SurveyForm() {
                         }}
                         labelPlacement="outside"
                         color={formik.values.score < 3 ? "danger" : "success"}
-                        placeholder="لطفا دلیل خود را بنویسید:"
+                        placeholder="اگه می خوای دلیلشو اینجا بنویس:"
                         variant="bordered"
                         value={formik.values.badReason || ""}
                         onChange={formik.handleChange}
@@ -418,7 +418,7 @@ export default function SurveyForm() {
                     }}
                     labelPlacement="outside"
                     color="primary"
-                    placeholder="نظر یا پیشنهاد خود را اینجا بنویسید..."
+                    placeholder="اگه می خوای دلیلشو اینجا بنویس:"
                     variant="bordered"
                     value={formik.values.finalComment}
                     onChange={formik.handleChange}
@@ -438,7 +438,7 @@ export default function SurveyForm() {
                     }}
                     labelPlacement="outside"
                     color="primary"
-                    placeholder="نظر یا پیشنهاد خود را اینجا بنویسید..."
+                    placeholder="..."
                     variant="bordered"
                     value={formik.values.finalComment}
                     onChange={e => {
