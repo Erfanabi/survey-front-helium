@@ -260,7 +260,7 @@ export default function SurveyForm() {
         className="flex min-h-screen items-center justify-center bg-cover bg-center p-4 px-2"
         style={{ backgroundImage: "url('/k2.jpg')" }}
       >
-        <LoadingOverlay />;
+        <LoadingOverlay />
       </div>
     );
   }
